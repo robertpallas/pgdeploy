@@ -1,0 +1,22 @@
+{
+  "name": "rarra",
+  "version": "0.1.0",
+  "description": "PostgreSQL change management tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robertpallas/rarra.git"
+  },
+  "keywords": [
+    "postgresql"
+  ],
+  "author": "Robert Pallas <robert@devtailor.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/robertpallas/rarra/issues"
+  },
+  "homepage": "https://github.com/robertpallas/rarra#readme"
+}
