@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "rarra": "./index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/robertpallas/rarra.git"
@@ -18,5 +21,16 @@
   "bugs": {
     "url": "https://github.com/robertpallas/rarra/issues"
   },
-  "homepage": "https://github.com/robertpallas/rarra#readme"
+  "homepage": "https://github.com/robertpallas/rarra#readme",
+  "dependencies": {
+    "async": "^1.5.2",
+    "chalk": "^1.1.1",
+    "commander": "^2.9.0",
+    "inquirer": "^0.12.0",
+    "lodash": "^4.5.0",
+    "mkpath": "^1.0.0",
+    "mustache": "^2.2.1",
+    "pg": "^4.4.6",
+    "recursive-readdir-sync": "^1.0.6"
+  }
 }
