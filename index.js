@@ -38,7 +38,7 @@ program
 		let call = require('./lib/add' + whatFile + '.js');
 		call(latestRelease, directory);
 
-		rarra.success();
+		//rarra.success();
 	});
 
 program
@@ -47,8 +47,10 @@ program
 	.option('-c, --clean', 'Deletes everything in the environment database before deploy')
 	.option('-g, --generate', 'Generate test data after deploy')
 	.option('-d, --dry-run', 'Dry run shows you what it deploys but wont commit anything')
-	//.option('-v, --verbose', 'Debug your release in more words')
+	.option('-v, --verbose', 'Debug your release in more words')
 	.option('-s, --single', 'Deploy only next unreleased version')
+	.option('-t, --tests', 'Run tests')
+	.option('-n, --not-transaction', 'Deploy by committing release sql files rather than as a patch in transaction. Allows only single working file besides the release.')
 	.action(require('./lib/deploy.js'));
 
 program.parse(process.argv);
