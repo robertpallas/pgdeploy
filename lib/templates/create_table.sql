@@ -9,5 +9,5 @@ create table if not exists {{schema}}.{{table}}
   {{#update}}
   update_time timestamptz not null default current_timestamp,
   {{/update}}
-  id serial
+  id bigserial primary key
 );
