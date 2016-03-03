@@ -53,4 +53,14 @@ program
 	.option('-n, --not-transaction', 'Deploy by committing release sql files rather than as a patch in transaction. Allows only single working file besides the release.')
 	.action(require('./lib/deploy.js'));
 
+program
+	.command('export')
+	.description('Export all data from tables to a local back-up')
+	.action(require('./lib/export.js'));
+
+program
+	.command('import')
+	.description('Import data from local back-up into one of the environments database tables')
+	.action(require('./lib/import.js'));
+
 program.parse(process.argv);
