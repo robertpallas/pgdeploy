@@ -16,9 +16,9 @@ program
 program
 	.command('setup [env]')
 	.description('add another database environment to manage')
-	.action(function(env) {
+	.action((env) => {
 		let setupEnv = require('./lib/setupEnvironment.js');
-		setupEnv(env, function(err) {
+		setupEnv(env, (err) => {
 			if(err) {
 				rarra.error(err);
 			} else {
@@ -30,7 +30,7 @@ program
 program
 	.command('add [what]')
 	.description('add a release or schema/table/function into latest release')
-	.action(function(what) {
+	.action((what) => {
 		let latestRelease = releases.getLatestRelease();
 		let directory = rarra.getConfig().directory;
 		let whatFile = what.substr(0, 1).toUpperCase() + what.substr(1).toLowerCase();
@@ -45,12 +45,12 @@ program
 	.command('deploy')
 	.description('deploy the unreleased releases to environment')
 	.option('-c, --clean', 'Deletes everything in the environment database before deploy')
-	.option('-g, --generate', 'Generate test data after deploy')
+	.option('-g, --generate', 'Generate test data after deploy with import')
 	.option('-d, --dry-run', 'Dry run shows you what it deploys but wont commit anything')
-	.option('-v, --verbose', 'Debug your release in more words')
+	.option('-v, --verbose', 'Log your release process in more detail')
 	.option('-s, --single', 'Deploy only next unreleased version')
 	.option('-t, --tests', 'Run tests')
-	.option('-n, --not-transaction', 'Deploy by committing release sql files rather than as a patch in transaction. Allows only single working file besides the release.')
+	.option('-n, --not-transaction', 'Deploy by committing release sql files one by one rather than as a patch in a transaction. Allows only single working file besides the release.')
 	.action(require('./lib/deploy.js'));
 
 program
@@ -61,6 +61,10 @@ program
 program
 	.command('import')
 	.description('Import data from local back-up into one of the environments database tables')
-	.action(require('./lib/import.js'));
+	.action(() => {
+		require('./lib/import.js')(() => {
+			rarra.success('All found files done');
+		});
+	});
 
 program.parse(process.argv);
