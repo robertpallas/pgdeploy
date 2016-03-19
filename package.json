@@ -1,5 +1,5 @@
 {
-  "name": "rarra",
+  "name": "pgdeploy",
   "version": "0.1.0",
   "description": "PostgreSQL change management tool",
   "main": "index.js",
@@ -7,11 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "rarra": "./index.js"
+    "pgdeploy": "./index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/robertpallas/rarra.git"
+    "url": "git+https://github.com/robertpallas/pgdeploy.git"
   },
   "keywords": [
     "postgresql"
@@ -19,9 +19,9 @@
   "author": "Robert Pallas <robert@devtailor.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/robertpallas/rarra/issues"
+    "url": "https://github.com/robertpallas/pgdeploy/issues"
   },
-  "homepage": "https://github.com/robertpallas/rarra#readme",
+  "homepage": "https://github.com/robertpallas/pgdeploy#readme",
   "dependencies": {
     "async": "^1.5.2",
     "chalk": "^1.1.1",

@@ -2,14 +2,14 @@
 'use strict';
 
 const program = require('commander');
-const rarra = require('./lib/rarra.js');
+const pgdeploy = require('./lib/pgdeploy.js');
 const releases = require('./lib/releases.js');
 
 program.version('0.1.0');
 
 program
 	.command('init')
-	.description('initialize Rarra project')
+	.description('initialize pgdeploy project')
 	.option('-f, --force', 'Deletes previously initialized project')
 	.action(require('./lib/init.js'));
 
@@ -20,9 +20,9 @@ program
 		let setupEnv = require('./lib/setupEnvironment.js');
 		setupEnv(env, (err) => {
 			if(err) {
-				rarra.error(err);
+				pgdeploy.error(err);
 			} else {
-				rarra.success();
+				pgdeploy.success();
 			}
 		});
 	});
@@ -32,13 +32,13 @@ program
 	.description('add a release or schema/table/function into latest release')
 	.action((what) => {
 		let latestRelease = releases.getLatestRelease();
-		let directory = rarra.getConfig().directory;
+		let directory = pgdeploy.getConfig().directory;
 		let whatFile = what.substr(0, 1).toUpperCase() + what.substr(1).toLowerCase();
 
 		let call = require('./lib/add' + whatFile + '.js');
 		call(latestRelease, directory);
 
-		//rarra.success();
+		//pgdeploy.success();
 	});
 
 program
@@ -63,7 +63,7 @@ program
 	.description('Import data from local back-up into one of the environments database tables')
 	.action(() => {
 		require('./lib/import.js')(() => {
-			rarra.success('All found files done');
+			pgdeploy.success('All found files done');
 		});
 	});
 

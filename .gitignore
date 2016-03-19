@@ -37,4 +37,4 @@ node_modules
 
 # tests
 db/
-rarra.json
+pgdeploy.json
