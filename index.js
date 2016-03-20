@@ -5,7 +5,7 @@ const program = require('commander');
 const pgdeploy = require('./lib/pgdeploy.js');
 const releases = require('./lib/releases.js');
 
-program.version('0.1.0');
+program.version(require('./package.json').version);
 
 program
 	.command('init')
@@ -16,7 +16,7 @@ program
 program
 	.command('setup [env]')
 	.description('add another database environment to manage')
-	.action((env) => {
+	.action(env => {
 		let setupEnv = require('./lib/setupEnvironment.js');
 		setupEnv(env, (err) => {
 			if(err) {
@@ -30,7 +30,7 @@ program
 program
 	.command('add [what]')
 	.description('add a release or schema/table/function into latest release')
-	.action((what) => {
+	.action(what => {
 		let latestRelease = releases.getLatestRelease();
 		let directory = pgdeploy.getConfig().directory;
 		let whatFile = what.substr(0, 1).toUpperCase() + what.substr(1).toLowerCase();
@@ -49,7 +49,7 @@ program
 	.option('-d, --dry-run', 'Dry run shows you what it deploys but wont commit anything')
 	.option('-v, --verbose', 'Log your release process in more detail')
 	.option('-s, --single', 'Deploy only next unreleased version')
-	.option('-t, --tests', 'Run tests')
+	.option('-t, --test', 'Run tests')
 	.option('-n, --not-transaction', 'Deploy by committing release sql files one by one rather than as a patch in a transaction. Allows only single working file besides the release.')
 	.action(require('./lib/deploy.js'));
 
@@ -66,5 +66,10 @@ program
 			pgdeploy.success('All found files done');
 		});
 	});
+
+program
+	.command('test [env]')
+	.description('Run all test files')
+	.action(env => require('./lib/test.js')(env));
 
 program.parse(process.argv);
