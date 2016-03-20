@@ -1,0 +1,27 @@
+// {{{functionFilename}}}
+'use strict';
+
+const pgdeployPath = require('requireg').resolve('pgdeploy');
+const db = require(pgdeployPath.replace('index.js', 'lib/db.js'));
+const should = require(pgdeployPath.replace('index.js', 'node_modules/should'));
+
+const env = global.pgdeployTestEnvironmentName;
+
+describe('{{schema}}.{{function}}', function() {
+
+	before(function(done) {
+		done()
+	});
+
+	it('should call the function', function(done) {
+	    {{#inParams}}
+	    let {{name}};
+	    {{/inParams}}
+
+		db.query(env, 'select * from {{schema}}.{{function}}({{paramPlaces}})', [{{paramNames}}], function(err, res) {
+			if (err) return done(err);
+			res.rows.should.be.ok();
+			done();
+		});
+	});
+});
