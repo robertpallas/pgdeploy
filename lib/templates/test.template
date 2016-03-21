@@ -1,6 +1,7 @@
 // {{{functionFilename}}}
 'use strict';
 
+// TODO: requireg must be installed this way
 const pgdeployPath = require('requireg').resolve('pgdeploy');
 const db = require(pgdeployPath.replace('index.js', 'lib/db.js'));
 const should = require(pgdeployPath.replace('index.js', 'node_modules/should'));
@@ -10,7 +11,22 @@ const env = global.pgdeployTestEnvironmentName;
 describe('{{schema}}.{{function}}', function() {
 
 	before(function(done) {
-		done()
+		done();
+	});
+
+	// TODO: can those go higher up into pgdeploy?
+	beforeEach(function(done) {
+		db.query(env, 'begin', [], function(err, res) {
+			if (err) return done(err);
+			done();
+		});
+	});
+
+	afterEach(function(done) {
+		db.query(env, 'rollback', [], function(err, res) {
+			if (err) return done(err);
+			done();
+		});
 	});
 
 	it('should call the function', function(done) {
