@@ -1,74 +1,89 @@
 #!/usr/bin/env node
-'use strict';
 
 const program = require('commander');
 const pgdeploy = require('./lib/pgdeploy.js');
 
+const init = require('./lib/init.js');
+const setupEnv = require('./lib/setupEnvironment.js');
+const releases = require('./lib/releases.js');
+const deploy = require('./lib/deploy.js');
+const exportData = require('./lib/export.js');
+const importData = require('./lib/import.js');
+const test = require('./lib/test.js');
+
+const addFunction = require('./lib/addFunction.js');
+const addRelease = require('./lib/addRelease.js');
+const addSchema = require('./lib/addSchema.js');
+const addTable = require('./lib/addTable.js');
+
+const addCalls = {
+    addFunction,
+    addRelease,
+    addSchema,
+    addTable
+};
+
 program.version(require('./package.json').version);
 
 program
-	.command('init')
-	.description('initialize pgdeploy project')
-	.option('-f, --force', 'Deletes previously initialized project')
-	.action(options => require('./lib/init.js')(options));
+    .command('init')
+    .description('initialize pgdeploy project')
+    .option('-f, --force', 'Deletes previously initialized project')
+    .action(options => init(options));
 
 program
-	.command('setup [env]')
-	.description('add another database environment to manage')
-	.action(env => {
-		let setupEnv = require('./lib/setupEnvironment.js');
-		setupEnv(env, (err) => {
-			if(err) {
-				pgdeploy.error(err);
-			} else {
-				pgdeploy.success();
-			}
-		});
-	});
+    .command('setup [env]')
+    .description('add another database environment to manage')
+    .action((env) => {
+        setupEnv(env, (err) => {
+            if(err) {
+                pgdeploy.error(err);
+            } else {
+                pgdeploy.success();
+            }
+        });
+    });
 
 program
-	.command('add [what]')
-	.description('add a release or schema/table/function into latest release')
-	.action(what => {
-		let latestRelease = require('./lib/releases.js').getLatestRelease();
-		let directory = pgdeploy.getConfig().directory;
-		let whatFile = what.substr(0, 1).toUpperCase() + what.substr(1).toLowerCase();
+    .command('add [what]')
+    .description('add a release or schema/table/function into latest release')
+    .action((what) => {
+        const latestRelease = releases.getLatestRelease();
+        const directory = pgdeploy.getConfig().directory;
+        const filename = `add${what.substr(0, 1).toUpperCase()}${what.substr(1).toLowerCase()}`;
 
-		let call = require('./lib/add' + whatFile + '.js');
-		call(latestRelease, directory);
-
-		//pgdeploy.success();
-	});
+        addCalls[filename](latestRelease, directory);
+    });
 
 program
-	.command('deploy')
-	.description('deploy the unreleased releases to environment')
-	.option('-c, --clean', 'Deletes everything in the environment database before deploy')
-	.option('-g, --generate', 'Generate test data from one of the backups after deploy with import')
-	.option('-d, --dry-run', 'Dry run shows you what it deploys but wont commit anything')
-	.option('-v, --verbose', 'Log your release process in more detail')
-	.option('-s, --single', 'Deploy only next unreleased version')
-	.option('-t, --test', 'Run tests')
-	.option('-n, --not-transaction', 'Deploy by committing release sql files one by one rather than as a patch in a transaction. Allows only single working file besides the release.')
-	.action(options => require('./lib/deploy.js')(options));
+    .command('deploy')
+    .description('deploy the unreleased releases to environment')
+    .option('-c, --clean', 'Deletes everything in the environment database before deploy')
+    .option('-g, --generate', 'Generate test data from one of the backups after deploy with import')
+    .option('-d, --dry-run', 'Dry run shows you what it deploys but wont commit anything')
+    .option('-v, --verbose', 'Log your release process in more detail')
+    .option('-s, --single', 'Deploy only next unreleased version')
+    .option('-t, --test', 'Run tests')
+    .option('-n, --not-transaction', 'Deploy by committing release sql files one by one rather than as a patch in a transaction. Allows only single working file besides the release.')
+    .action(options => deploy(options));
 
 program
-	.command('export')
-	.description('Export all data from tables to a local back-up')
-	.action(() => require('./lib/export.js')());
+    .command('export')
+    .description('Export all data from tables to a local back-up')
+    .action(() => exportData());
 
 program
-	.command('import')
-	.description('Import data from local back-up into one of the environments database tables')
-	.action(() => {
-		require('./lib/import.js')(() => {
-			pgdeploy.success('All found files done');
-		});
-	});
+    .command('import')
+    .description('Import data from local back-up into one of the environments database tables')
+    .action(() => {
+        importData(() => {
+            pgdeploy.success('All found files done');
+        });
+    });
 
 program
-	.command('test [env]')
-	.description('Run all test files')
-	.action(env => require('./lib/test.js')(env));
+    .command('test [env]')
+    .description('Run all test files')
+    .action(env => test(env));
 
 program.parse(process.argv);

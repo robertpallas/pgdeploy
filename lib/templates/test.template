@@ -10,34 +10,34 @@ const env = global.pgdeployTestEnvironmentName;
 
 describe('{{schema}}.{{function}}', function() {
 
-	before(function(done) {
-		done();
-	});
+    before(function(done) {
+        done();
+    });
 
-	// TODO: can those go higher up into pgdeploy?
-	beforeEach(function(done) {
-		db.query(env, 'begin', [], function(err, res) {
-			if (err) return done(err);
-			done();
-		});
-	});
+    // TODO: can those go higher up into pgdeploy?
+    beforeEach(function(done) {
+        db.query(env, 'begin', [], function(err, res) {
+            if (err) return done(err);
+            done();
+        });
+    });
 
-	afterEach(function(done) {
-		db.query(env, 'rollback', [], function(err, res) {
-			if (err) return done(err);
-			done();
-		});
-	});
+    afterEach(function(done) {
+        db.query(env, 'rollback', [], function(err, res) {
+            if (err) return done(err);
+            done();
+        });
+    });
 
-	it('should call the function', function(done) {
-	    {{#inParams}}
-	    let {{name}};
-	    {{/inParams}}
+    it('should call the function', function(done) {
+        {{#inParams}}
+        let {{name}};
+        {{/inParams}}
 
-		db.query(env, 'select * from {{schema}}.{{function}}({{paramPlaces}})', [{{paramNames}}], function(err, res) {
-			if (err) return done(err);
-			res.rows.should.be.ok();
-			done();
-		});
-	});
+        db.query(env, 'select * from {{schema}}.{{function}}({{paramPlaces}})', [{{paramNames}}], function(err, res) {
+            if (err) return done(err);
+            res.rows.should.be.ok();
+            done();
+        });
+    });
 });
