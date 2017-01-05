@@ -58,8 +58,9 @@ program
 program
     .command('deploy')
     .description('deploy the unreleased releases to environment')
+    .option('-e, --env [value]', 'One of the environments set in pgdeploy.json')
+    .option('-g, --generate [value]', 'Generate test data from one of the backups after deploy with import')
     .option('-c, --clean', 'Deletes everything in the environment database before deploy')
-    .option('-g, --generate', 'Generate test data from one of the backups after deploy with import')
     .option('-d, --dry-run', 'Dry run shows you what it deploys but wont commit anything')
     .option('-v, --verbose', 'Log your release process in more detail')
     .option('-s, --single', 'Deploy only next unreleased version')
@@ -74,11 +75,13 @@ program
 
 program
     .command('import')
+    .option('-e, --env [value]', 'One of the environments set in pgdeploy.json')
+    .option('-b, --backup [value]', 'Backup name from __backups')
     .description('Import data from local back-up into one of the environments database tables')
-    .action(() => {
+    .action((options) => {
         importData(() => {
             pgdeploy.success('All found files done');
-        });
+        }, options.env, options.backup);
     });
 
 program
