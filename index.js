@@ -66,6 +66,11 @@ program
     .option('-s, --single', 'Deploy only next unreleased version')
     .option('-t, --test', 'Run tests')
     .option('-n, --not-transaction', 'Deploy by committing release sql files one by one rather than as a patch in a transaction. Allows only single working file besides the release.')
+    .option('-H, --host [value]', 'Host with port')
+    .option('-U, --username [value]', 'Username')
+    .option('-P, --password [value]', 'Password')
+    .option('-D, --database [value]', 'Database name')
+    .option('-f, --force', 'Force the deploy to go through without asking if one is sure even in protected environments with options sent in')
     .action(options => deploy(options));
 
 program
