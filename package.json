@@ -1,6 +1,6 @@
 {
   "name": "pgdeploy",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "PostgreSQL change management tool",
   "main": "index.js",
   "scripts": {
